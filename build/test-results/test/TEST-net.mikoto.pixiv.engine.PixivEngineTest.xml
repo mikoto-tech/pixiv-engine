@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.mikoto.pixiv.engine.PixivEngineTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2021-12-25T18:23:30" hostname="DESKTOP-JA9T16E" time="1.744">
+  <properties/>
+  <testcase name="test()" classname="net.mikoto.pixiv.engine.PixivEngineTest" time="1.744"/>
+  <system-out><![CDATA[[2021-12-26 02:23:31] INFO :Query data(id:0)
+[2021-12-26 02:23:31] INFO :Query data(id:0)
+[2021-12-26 02:23:31] INFO :Query data(id:0)
+[2021-12-26 02:23:31] INFO :Query data(id:0)
+[2021-12-26 02:23:31] INFO :Query data(id:0)
+[2021-12-26 02:23:31] INFO :Query data(id:0)
+[2021-12-26 02:23:31] INFO :Query data(id:0)
+[2021-12-26 02:23:32] INFO :Query data(id:0)
+[2021-12-26 02:23:32] INFO :Query data(id:0)
+[2021-12-26 02:23:32] INFO :Query data(id:0)
+null
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
