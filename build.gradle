@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'com.github.johnrengelman.shadow' version '7.1.1'
 }
 
 group 'net.mikoto.pixiv'
@@ -8,6 +10,32 @@ version '1.0.0'
 repositories {
     mavenCentral()
     mavenLocal()
+}
+
+publishing {
+    publications {
+        myPublication(MavenPublication) {
+            from components.java
+            pom {
+                name = "pixiv-engine"
+                description = "Mikoto pixiv engine"
+                url = "https://www.mikoto.net.cn"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "https://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "mikoto"
+                        name = "Zhang keshun"
+                        email = "mikoto@ungine.cn"
+                    }
+                }
+            }
+        }
+    }
 }
 
 dependencies {

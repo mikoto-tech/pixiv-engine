@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author mikoto
@@ -56,6 +57,7 @@ public class HttpUtil {
         String result;
         OkHttpClient client = new OkHttpClient.Builder()
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1))
+                .readTimeout(5, TimeUnit.MINUTES)
                 .build();
         Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
