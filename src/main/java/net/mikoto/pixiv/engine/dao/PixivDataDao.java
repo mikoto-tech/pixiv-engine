@@ -1,7 +1,6 @@
 package net.mikoto.pixiv.engine.dao;
 
 import net.mikoto.dao.BaseDao;
-import net.mikoto.log.Logger;
 import net.mikoto.pixiv.api.pojo.PixivData;
 import net.mikoto.pixiv.engine.pojo.Config;
 import org.jetbrains.annotations.NotNull;
@@ -12,9 +11,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static net.mikoto.pixiv.engine.util.CharUtil.stringToUnicode;
-import static net.mikoto.pixiv.engine.util.CharUtil.unicodeToString;
 
 
 /**
@@ -33,7 +29,6 @@ public class PixivDataDao extends BaseDao {
     private static final Integer GRAND_8 = 5000;
     private static final Integer GRAND_9 = 1000;
     private static final Integer GRAND_10 = 0;
-    private final Logger logger;
 
     /**
      * Init method.
@@ -42,7 +37,6 @@ public class PixivDataDao extends BaseDao {
      */
     public PixivDataDao(@NotNull Config config) {
         super(config.getJpbcUrl(), config.getUserName(), config.getUserPassword());
-        this.logger = config.getLogger();
     }
 
     /**
@@ -60,8 +54,8 @@ public class PixivDataDao extends BaseDao {
             outputPixivData.setArtworkId(resultSet.getInt("pk_artwork_id"));
             outputPixivData.setArtworkTitle(resultSet.getString("artwork_title"));
             outputPixivData.setAuthorId(resultSet.getInt("author_id"));
-            outputPixivData.setAuthorName(unicodeToString(resultSet.getString("author_name")));
-            outputPixivData.setDescription(unicodeToString(resultSet.getString("description")));
+            outputPixivData.setAuthorName(resultSet.getString("author_name"));
+            outputPixivData.setDescription(resultSet.getString("description"));
             outputPixivData.setPageCount(resultSet.getInt("page_count"));
             outputPixivData.setBookmarkCount(resultSet.getInt("bookmark_count"));
             outputPixivData.setLikeCount(resultSet.getInt("like_count"));
@@ -79,8 +73,6 @@ public class PixivDataDao extends BaseDao {
             illustUrls.put("original", resultSet.getString("illust_url_original"));
             outputPixivData.setIllustUrls(illustUrls);
         }
-
-        logger.log("Query data(id:" + outputPixivData.getArtworkId() + ")");
 
         return outputPixivData;
     }
@@ -112,8 +104,8 @@ public class PixivDataDao extends BaseDao {
         preparedStatement.setInt(1, pixivData.getArtworkId());
         preparedStatement.setString(2, pixivData.getArtworkTitle());
         preparedStatement.setInt(3, pixivData.getAuthorId());
-        preparedStatement.setString(4, stringToUnicode(pixivData.getAuthorName()));
-        preparedStatement.setString(5, stringToUnicode(pixivData.getDescription()));
+        preparedStatement.setString(4, pixivData.getAuthorName());
+        preparedStatement.setString(5, pixivData.getDescription());
         StringBuilder tags = new StringBuilder();
         for (int i = 0; i < pixivData.getTags().length; i++) {
             tags.append(pixivData.getTags()[i]);
@@ -136,7 +128,6 @@ public class PixivDataDao extends BaseDao {
         preparedStatement.setString(18, pixivData.getCreateDate());
         preparedStatement.setString(19, pixivData.getCrawlDate());
         preparedStatement.executeUpdate();
-        logger.log("update data(id:" + pixivData.getArtworkId() + ")");
 
         preparedStatement.close();
     }

@@ -7,6 +7,7 @@ import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -54,14 +55,19 @@ public class HttpUtil {
      */
     @NotNull
     public static String httpGet(String url) throws IOException {
-        String result;
-        OkHttpClient client = new OkHttpClient.Builder()
-                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-                .readTimeout(5, TimeUnit.MINUTES)
-                .build();
-        Request request = new Request.Builder().url(url).build();
-        Response response = client.newCall(request).execute();
-        result = Objects.requireNonNull(response.body()).string();
-        return result;
+        try {
+            String result;
+            OkHttpClient client = new OkHttpClient.Builder()
+                    .protocols(Collections.singletonList(Protocol.HTTP_1_1))
+                    .readTimeout(5, TimeUnit.MINUTES)
+                    .retryOnConnectionFailure(true)
+                    .build();
+            Request request = new Request.Builder().url(url).build();
+            Response response = client.newCall(request).execute();
+            result = Objects.requireNonNull(response.body()).string();
+            return result;
+        } catch (SocketTimeoutException e) {
+            return httpGet(url);
+        }
     }
 }

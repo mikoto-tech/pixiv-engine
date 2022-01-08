@@ -15,7 +15,6 @@ public class PixivEngine {
 
     public PixivEngine(@NotNull Config config) {
         if (config.getJpbcUrl() == null
-                || config.getLogger() == null
                 || config.getUserName() == null
                 || config.getUserPassword() == null
                 || config.getPixivDataForwardServer() == null
