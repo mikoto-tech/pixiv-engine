@@ -18,6 +18,9 @@ import java.util.Map;
  * @date 2021/12/11 15:22
  */
 public class PixivDataDao extends BaseDao {
+    /**
+     * Constants.
+     */
     private static final Integer GRAND_0 = 100000;
     private static final Integer GRAND_1 = 50000;
     private static final Integer GRAND_2 = 40000;

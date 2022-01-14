@@ -31,7 +31,7 @@ public class PixivDataService {
     private Integer lastServer = 0;
 
     /**
-     * 构建方法
+     * Init service.
      */
     public PixivDataService(@NotNull Config config) {
         this.key = config.getKey();

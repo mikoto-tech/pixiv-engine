@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.mikoto.pixiv.engine.PixivEngineTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-01-02T05:28:23" hostname="DESKTOP-JA9T16E" time="0.017">
+<testsuite name="net.mikoto.pixiv.engine.PixivEngineTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2022-01-08T15:02:55" hostname="DESKTOP-JA9T16E" time="2.348">
   <properties/>
-  <testcase name="test()" classname="net.mikoto.pixiv.engine.PixivEngineTest" time="0.017"/>
-  <system-out><![CDATA[
+  <testcase name="test()" classname="net.mikoto.pixiv.engine.PixivEngineTest" time="2.348"/>
+  <system-out><![CDATA[[2022-01-08 23:02:58] INFO :{"body":{"pageCount":1,"updateDate":"2009-05-10T02:33:35+00:00","grading":0,"artworkId":4211833,"description":"同人グループへの初心作です。ComiCon04現場で販売予定で、完成品を楽しみになりました！みんなご武運を！","crawlDate":"2022-01-08 23:02:57","artworkTitle":"舐めなさい","likeCount":13871,"authorId":47527,"illustUrls":{"small":"https://i.pximg.net/c/540x540_70/img-master/img/2009/05/10/11/33/35/4211833_p0_master1200.jpg","original":"https://i.pximg.net/img-original/img/2009/05/10/11/33/35/4211833_p0.jpg","mini":"https://i.pximg.net/c/48x48/img-master/img/2009/05/10/11/33/35/4211833_p0_square1200.jpg","thumb":"https://i.pximg.net/c/250x250_80_a2/img-master/img/2009/05/10/11/33/35/4211833_p0_square1200.jpg","regular":"https://i.pximg.net/img-master/img/2009/05/10/11/33/35/4211833_p0_master1200.jpg"},"tags":["咲夜","参照なし","影","十六夜","足","東方","段階","ストッキング","ハイヒール","絶対領域"],"authorName":"Geister","bookmarkCount":12494,"viewCount":397729,"createDate":"2009-05-10T02:33:35+00:00"}}
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -13,6 +13,11 @@ public class PixivEngine {
     private final PixivDataDao pixivDataDao;
     private final PixivDataService pixivDataService;
 
+    /**
+     * Init engine.
+     *
+     * @param config A config object.
+     */
     public PixivEngine(@NotNull Config config) {
         if (config.getJpbcUrl() == null
                 || config.getUserName() == null
