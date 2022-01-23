@@ -6,15 +6,14 @@ import com.alibaba.fastjson.JSONObject;
 import net.mikoto.pixiv.api.pojo.PixivData;
 import net.mikoto.pixiv.engine.dao.PixivDataDao;
 import net.mikoto.pixiv.engine.pojo.Config;
+import net.mikoto.pixiv.engine.pojo.PixivDataResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
+import java.util.*;
 
 import static net.mikoto.pixiv.engine.util.HttpUtil.httpGet;
 
@@ -36,6 +35,7 @@ public class PixivDataService {
     public PixivDataService(@NotNull Config config) {
         this.key = config.getKey();
         this.pixivDataForwardServer = config.getPixivDataForwardServer();
+        tableName.add("bookmark_0_1000");
         tableName.add("bookmark_1000_5000");
         tableName.add("bookmark_5000_10000");
         tableName.add("bookmark_10000_15000");
@@ -135,12 +135,45 @@ public class PixivDataService {
                 pageArray) {
             String sql = "SELECT * FROM `" + tableName.get(page) + "` WHERE `tags` LIKE '%" + tag + "%' order by rand() limit 1";
 
-            PixivData pixivData = pixivDataDao.queryPixivData(sql);
+            PixivDataResult pixivDataResult = pixivDataDao.queryPixivData(sql);
 
-            if (pixivData != null) {
-                if (pixivData.getArtworkId() != 0) {
-                    return pixivData;
+            if (pixivDataResult != null) {
+                if (pixivDataResult.getPixivDataCount() == 1) {
+                    return pixivDataResult.getIterator().next();
                 }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get pixiv data by tag.
+     *
+     * @param tag          Tag name.
+     * @param pixivDataDao Dao object of database.
+     * @return A pixiv data.
+     * @throws SQLException An error.
+     */
+    public Set<PixivData> getMultiPixiDataByTag(@NotNull String tag, @NotNull PixivDataDao pixivDataDao, Column column, Type type, int count) throws SQLException {
+        ArrayList<String> pageArray = getPageArray(type);
+        ArrayList<PixivData> outputPixivDataArrayList = new ArrayList<>();
+        int outputPixivDataCount = 0;
+
+        for (String page :
+                pageArray) {
+            String sql = "SELECT * FROM `" + page + "` WHERE `tags` LIKE '%" + tag + "%' order by " + column + " " + type + " limit " + count;
+
+            PixivDataResult pixivDataResult = pixivDataDao.queryPixivData(sql);
+
+            outputPixivDataCount += pixivDataResult.getPixivDataCount();
+
+            outputPixivDataArrayList.addAll(pixivDataResult.getPixivDataSet());
+
+            if (outputPixivDataCount >= count) {
+                for (int i = 0; i < outputPixivDataCount - count; i++) {
+                    outputPixivDataArrayList.remove(outputPixivDataArrayList.size() - 1);
+                }
+                return new HashSet<>(outputPixivDataArrayList);
             }
         }
         return null;
@@ -161,11 +194,11 @@ public class PixivDataService {
                 pageArray) {
             String sql = "SELECT * FROM `" + tableName.get(page) + "` WHERE `author_name` LIKE '%" + authorName + "%' order by rand() limit 1";
 
-            PixivData pixivData = pixivDataDao.queryPixivData(sql);
+            PixivDataResult pixivDataResult = pixivDataDao.queryPixivData(sql);
 
-            if (pixivData != null) {
-                if (pixivData.getArtworkId() != 0) {
-                    return pixivData;
+            if (pixivDataResult != null) {
+                if (pixivDataResult.getPixivDataCount() == 1) {
+                    return pixivDataResult.getIterator().next();
                 }
             }
         }
@@ -188,6 +221,21 @@ public class PixivDataService {
             }
             pageArray.add(page);
         }
+        return pageArray;
+    }
+
+    /**
+     * Get random page array.
+     *
+     * @return An array list.
+     */
+    @NotNull
+    private ArrayList<String> getPageArray(@NotNull Type type) {
+        if (type.equals(Type.desc)) {
+            Collections.reverse(tableName);
+        }
+        ArrayList<String> pageArray = new ArrayList<>(tableName);
+        Collections.reverse(tableName);
         return pageArray;
     }
 }

@@ -1,11 +1,15 @@
 package net.mikoto.pixiv.engine;
 
+import net.mikoto.pixiv.api.pojo.PixivData;
 import net.mikoto.pixiv.engine.logger.impl.ConsoleTimeFormatLogger;
 import net.mikoto.pixiv.engine.pojo.Config;
+import net.mikoto.pixiv.engine.service.Column;
+import net.mikoto.pixiv.engine.service.Type;
 import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * @author mikoto
@@ -16,20 +20,23 @@ public class PixivEngineTest {
     void test() {
         Config config = new Config();
         config.setLogger(new ConsoleTimeFormatLogger());
-        config.setJpbcUrl("jdbc:mysql://203.135.96.74:51108/pixiv_data");
+        config.setJpbcUrl("jdbc:mysql://192.168.10.2:3306/pixiv_data");
         config.setUserName("pixiv_data");
-        config.setUserPassword("YOUR DATABASE PASSWORD");
+        config.setUserPassword("cicj6RNpxdADHpLx");
         config.setKey("1fc499f4ef758ad328505f6747d39198c9373cb1dfe893f21300f0eeb7a3f4c4");
         ArrayList<String> pixivDataForwardServer = new ArrayList<>();
         pixivDataForwardServer.add("pixiv-forward-1.mikoto-tech.cc");
-        pixivDataForwardServer.add("pixiv-forward-2.mikoto-tech.cc");
         pixivDataForwardServer.add("pixiv-forward-3.mikoto-tech.cc");
         config.setPixivDataForwardServer(pixivDataForwardServer);
 
         PixivEngine pixivEngine = new PixivEngine(config);
 
         try {
-            config.getLogger().log(pixivEngine.getPixivDataService().getPixivDataByTag("ñ|∑Ω", pixivEngine.getPixivDataDao()).toJsonObject().toJSONString());
+            Set<PixivData> pixivDataSet = pixivEngine.getPixivDataService().getMultiPixiDataByTag("≥ı“Ù", pixivEngine.getPixivDataDao(), Column.bookmark_count, Type.desc, 5);
+            for (PixivData pixivData :
+                    pixivDataSet) {
+                config.getLogger().log(pixivData.toJsonObject().toJSONString());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

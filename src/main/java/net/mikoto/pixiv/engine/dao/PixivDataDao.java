@@ -3,6 +3,7 @@ package net.mikoto.pixiv.engine.dao;
 import net.mikoto.dao.BaseDao;
 import net.mikoto.pixiv.api.pojo.PixivData;
 import net.mikoto.pixiv.engine.pojo.Config;
+import net.mikoto.pixiv.engine.pojo.PixivDataResult;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
@@ -49,35 +50,37 @@ public class PixivDataDao extends BaseDao {
      * @return A pixiv data object.
      * @throws SQLException A sql error.
      */
-    public PixivData queryPixivData(String sql) throws SQLException {
-        PixivData outputPixivData = new PixivData();
+    public PixivDataResult queryPixivData(String sql) throws SQLException {
         ResultSet resultSet = executeQuery(sql);
+        PixivDataResult pixivDataResult = new PixivDataResult();
 
         while (resultSet.next()) {
-            outputPixivData.setArtworkId(resultSet.getInt("pk_artwork_id"));
-            outputPixivData.setArtworkTitle(resultSet.getString("artwork_title"));
-            outputPixivData.setAuthorId(resultSet.getInt("author_id"));
-            outputPixivData.setAuthorName(resultSet.getString("author_name"));
-            outputPixivData.setDescription(resultSet.getString("description"));
-            outputPixivData.setPageCount(resultSet.getInt("page_count"));
-            outputPixivData.setBookmarkCount(resultSet.getInt("bookmark_count"));
-            outputPixivData.setLikeCount(resultSet.getInt("like_count"));
-            outputPixivData.setViewCount(resultSet.getInt("view_count"));
-            outputPixivData.setGrading(resultSet.getInt("grading"));
-            outputPixivData.setCrawlDate(resultSet.getDate("crawl_date").toString());
-            outputPixivData.setCreateDate(resultSet.getDate("create_date").toString());
-            outputPixivData.setUpdateDate(resultSet.getDate("update_date").toString());
-            outputPixivData.setTags(resultSet.getString("tags").split(";"));
+            PixivData pixivData = new PixivData();
+            pixivData.setArtworkId(resultSet.getInt("pk_artwork_id"));
+            pixivData.setArtworkTitle(resultSet.getString("artwork_title"));
+            pixivData.setAuthorId(resultSet.getInt("author_id"));
+            pixivData.setAuthorName(resultSet.getString("author_name"));
+            pixivData.setDescription(resultSet.getString("description"));
+            pixivData.setPageCount(resultSet.getInt("page_count"));
+            pixivData.setBookmarkCount(resultSet.getInt("bookmark_count"));
+            pixivData.setLikeCount(resultSet.getInt("like_count"));
+            pixivData.setViewCount(resultSet.getInt("view_count"));
+            pixivData.setGrading(resultSet.getInt("grading"));
+            pixivData.setCrawlDate(resultSet.getDate("crawl_date").toString());
+            pixivData.setCreateDate(resultSet.getDate("create_date").toString());
+            pixivData.setUpdateDate(resultSet.getDate("update_date").toString());
+            pixivData.setTags(resultSet.getString("tags").split(";"));
             Map<String, String> illustUrls = new HashMap<>(5);
             illustUrls.put("mini", resultSet.getString("illust_url_mini"));
             illustUrls.put("thumb", resultSet.getString("illust_url_thumb"));
             illustUrls.put("small", resultSet.getString("illust_url_small"));
             illustUrls.put("regular", resultSet.getString("illust_url_regular"));
             illustUrls.put("original", resultSet.getString("illust_url_original"));
-            outputPixivData.setIllustUrls(illustUrls);
+            pixivData.setIllustUrls(illustUrls);
+            pixivDataResult.add(pixivData);
         }
 
-        return outputPixivData;
+        return pixivDataResult;
     }
 
     /**
