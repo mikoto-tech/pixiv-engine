@@ -32,7 +32,7 @@ public class PixivEngineTest {
         PixivEngine pixivEngine = new PixivEngine(config);
 
         try {
-            Set<PixivData> pixivDataSet = pixivEngine.getPixivDataService().getMultiPixiDataByTag("≥ı“Ù", pixivEngine.getPixivDataDao(), Column.bookmark_count, Type.desc, 5);
+            Set<PixivData> pixivDataSet = pixivEngine.getPixivDataService().getMultiPixivDataByTag("≥ı“Ù", pixivEngine.getPixivDataDao(), Column.bookmark_count, Type.desc, 5);
             for (PixivData pixivData :
                     pixivDataSet) {
                 config.getLogger().log(pixivData.toJsonObject().toJSONString());

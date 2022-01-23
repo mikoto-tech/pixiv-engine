@@ -151,10 +151,13 @@ public class PixivDataService {
      *
      * @param tag          Tag name.
      * @param pixivDataDao Dao object of database.
+     * @param column       Sort by.
+     * @param type         Sorting method.
+     * @param count        The number of pixiv data.
      * @return A pixiv data.
      * @throws SQLException An error.
      */
-    public Set<PixivData> getMultiPixiDataByTag(@NotNull String tag, @NotNull PixivDataDao pixivDataDao, Column column, Type type, int count) throws SQLException {
+    public Set<PixivData> getMultiPixivDataByTag(@NotNull String tag, @NotNull PixivDataDao pixivDataDao, Column column, Type type, int count) throws SQLException {
         ArrayList<String> pageArray = getPageArray(type);
         ArrayList<PixivData> outputPixivDataArrayList = new ArrayList<>();
         int outputPixivDataCount = 0;
