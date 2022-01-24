@@ -13,7 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Random;
 
 import static net.mikoto.pixiv.engine.util.HttpUtil.httpGet;
 
@@ -157,26 +160,24 @@ public class PixivDataService {
      * @return A pixiv data.
      * @throws SQLException An error.
      */
-    public Set<PixivData> getMultiPixivDataByTag(@NotNull String tag, @NotNull PixivDataDao pixivDataDao, Column column, Type type, int count) throws SQLException {
-        ArrayList<String> pageArray = getPageArray(type);
+    public ArrayList<PixivData> getMultiPixivDataByTag(@NotNull String tag, @NotNull PixivDataDao pixivDataDao, Column column, Type type, int count) throws SQLException {
         ArrayList<PixivData> outputPixivDataArrayList = new ArrayList<>();
-        int outputPixivDataCount = 0;
 
         for (String page :
-                pageArray) {
-            String sql = "SELECT * FROM `" + page + "` WHERE `tags` LIKE '%" + tag + "%' order by " + column + " " + type + " limit " + (count - outputPixivDataCount);
+                getPageArray(type)) {
+            String sql = "SELECT * FROM `" + page + "` WHERE `tags` LIKE '%" + tag + "%' order by " + column + " " + type + " limit " + (count - outputPixivDataArrayList.size());
             PixivDataResult pixivDataResult = pixivDataDao.queryPixivData(sql);
-            outputPixivDataCount += pixivDataResult.getPixivDataCount();
             outputPixivDataArrayList.addAll(pixivDataResult.getPixivDataSet());
 
-            if (outputPixivDataCount >= count) {
-                for (int i = 0; i < outputPixivDataCount - count; i++) {
-                    outputPixivDataArrayList.remove(outputPixivDataArrayList.size() - 1);
-                }
-                return new HashSet<>(outputPixivDataArrayList);
+            if (outputPixivDataArrayList.size() >= count) {
+                return outputPixivDataArrayList;
             }
         }
-        return null;
+        if (outputPixivDataArrayList.size() > 0) {
+            return outputPixivDataArrayList;
+        } else {
+            return null;
+        }
     }
 
     /**

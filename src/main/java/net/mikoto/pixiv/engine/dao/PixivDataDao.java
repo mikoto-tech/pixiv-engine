@@ -22,17 +22,7 @@ public class PixivDataDao extends BaseDao {
     /**
      * Constants.
      */
-    private static final Integer GRAND_0 = 100000;
-    private static final Integer GRAND_1 = 50000;
-    private static final Integer GRAND_2 = 40000;
-    private static final Integer GRAND_3 = 30000;
-    private static final Integer GRAND_4 = 25000;
-    private static final Integer GRAND_5 = 20000;
-    private static final Integer GRAND_6 = 15000;
-    private static final Integer GRAND_7 = 10000;
-    private static final Integer GRAND_8 = 5000;
-    private static final Integer GRAND_9 = 1000;
-    private static final Integer GRAND_10 = 0;
+    private static final String RESULT = "result";
 
     /**
      * Init method.
@@ -92,20 +82,19 @@ public class PixivDataDao extends BaseDao {
     public void insertPixivData(@NotNull PixivData pixivData) throws SQLException {
         Connection connection = getConnection();
 
-        String sql = "select count(*) as result from " + getPixivDataTable(pixivData.getBookmarkCount()) + " where pk_artwork_id=?";
+        String sql = "select count(*) as result from " + getPixivDataTable(pixivData.getArtworkId()) + " where pk_artwork_id=?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, pixivData.getArtworkId());
         ResultSet resultSet = preparedStatement.executeQuery();
         resultSet.next();
-        int result = resultSet.getInt("result");
-        if (result != 0) {
+        if (resultSet.getInt(RESULT) != 0) {
             sql = "DELETE FROM " + getPixivDataTable(pixivData.getBookmarkCount()) + " WHERE pk_artwork_id=?;";
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, pixivData.getArtworkId());
             preparedStatement.executeUpdate();
         }
 
-        sql = "INSERT INTO pixiv_data." + getPixivDataTable(pixivData.getBookmarkCount()) + " (pk_artwork_id, artwork_title, author_id, author_name, description, tags, illust_url_mini, illust_url_thumb, illust_url_small, illust_url_regular, illust_url_original, page_count, bookmark_count, like_count, view_count, grading, update_date, create_date, crawl_date)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        sql = "INSERT INTO pixiv_data." + getPixivDataTable(pixivData.getArtworkId()) + " (pk_artwork_id, artwork_title, author_id, author_name, description, tags, illust_url_mini, illust_url_thumb, illust_url_small, illust_url_regular, illust_url_original, page_count, bookmark_count, like_count, view_count, grading, update_date, create_date, crawl_date)  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
         preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, pixivData.getArtworkId());
         preparedStatement.setString(2, pixivData.getArtworkTitle());
@@ -141,34 +130,10 @@ public class PixivDataDao extends BaseDao {
     /**
      * Get table.
      *
-     * @param bookmarkCount Bookmark count.
+     * @param artworkId The id of this artwork.
      * @return A table name.
      */
-    private String getPixivDataTable(@NotNull Integer bookmarkCount) {
-        String table = "bookmark_";
-        if (bookmarkCount > GRAND_0) {
-            table += String.valueOf(GRAND_0);
-        } else if (bookmarkCount > GRAND_1) {
-            table += GRAND_1 + "_" + GRAND_0;
-        } else if (bookmarkCount > GRAND_2) {
-            table += GRAND_2 + "_" + GRAND_1;
-        } else if (bookmarkCount > GRAND_3) {
-            table += GRAND_3 + "_" + GRAND_2;
-        } else if (bookmarkCount > GRAND_4) {
-            table += GRAND_4 + "_" + GRAND_3;
-        } else if (bookmarkCount > GRAND_5) {
-            table += GRAND_5 + "_" + GRAND_4;
-        } else if (bookmarkCount > GRAND_6) {
-            table += GRAND_6 + "_" + GRAND_5;
-        } else if (bookmarkCount > GRAND_7) {
-            table += GRAND_7 + "_" + GRAND_6;
-        } else if (bookmarkCount > GRAND_8) {
-            table += GRAND_8 + "_" + GRAND_7;
-        } else if (bookmarkCount > GRAND_9) {
-            table += GRAND_9 + "_" + GRAND_8;
-        } else if (bookmarkCount >= GRAND_10) {
-            table += GRAND_10 + "_" + GRAND_9;
-        }
-        return table;
+    public String getPixivDataTable(@NotNull Integer artworkId) {
+        return "artwork_table_" + (int) Math.ceil(Double.valueOf(artworkId) / 5000000.0);
     }
 }
