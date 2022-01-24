@@ -22,7 +22,7 @@ public class PixivEngineTest {
         config.setLogger(new ConsoleTimeFormatLogger());
         config.setJpbcUrl("jdbc:mysql://192.168.10.2:3306/pixiv_data");
         config.setUserName("pixiv_data");
-        config.setUserPassword("cicj6RNpxdADHpLx");
+        config.setUserPassword("YOUR DATABASE PASSWORD");
         config.setKey("1fc499f4ef758ad328505f6747d39198c9373cb1dfe893f21300f0eeb7a3f4c4");
         ArrayList<String> pixivDataForwardServer = new ArrayList<>();
         pixivDataForwardServer.add("pixiv-forward-1.mikoto-tech.cc");
@@ -32,7 +32,7 @@ public class PixivEngineTest {
         PixivEngine pixivEngine = new PixivEngine(config);
 
         try {
-            Set<PixivData> pixivDataSet = pixivEngine.getPixivDataService().getMultiPixivDataByTag("≥ı“Ù", pixivEngine.getPixivDataDao(), Column.bookmark_count, Type.desc, 5);
+            Set<PixivData> pixivDataSet = pixivEngine.getPixivDataService().getMultiPixivDataByTag("≥ı“Ù", pixivEngine.getPixivDataDao(), Column.bookmark_count, Type.desc, 10);
             for (PixivData pixivData :
                     pixivDataSet) {
                 config.getLogger().log(pixivData.toJsonObject().toJSONString());

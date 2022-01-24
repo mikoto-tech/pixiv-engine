@@ -164,12 +164,9 @@ public class PixivDataService {
 
         for (String page :
                 pageArray) {
-            String sql = "SELECT * FROM `" + page + "` WHERE `tags` LIKE '%" + tag + "%' order by " + column + " " + type + " limit " + count;
-
+            String sql = "SELECT * FROM `" + page + "` WHERE `tags` LIKE '%" + tag + "%' order by " + column + " " + type + " limit " + (count - outputPixivDataCount);
             PixivDataResult pixivDataResult = pixivDataDao.queryPixivData(sql);
-
             outputPixivDataCount += pixivDataResult.getPixivDataCount();
-
             outputPixivDataArrayList.addAll(pixivDataResult.getPixivDataSet());
 
             if (outputPixivDataCount >= count) {
@@ -192,13 +189,10 @@ public class PixivDataService {
      */
     public PixivData getPixivDataByAuthorName(@NotNull String authorName, @NotNull PixivDataDao pixivDataDao) throws SQLException {
         ArrayList<Integer> pageArray = getPageArray();
-
         for (Integer page :
                 pageArray) {
             String sql = "SELECT * FROM `" + tableName.get(page) + "` WHERE `author_name` LIKE '%" + authorName + "%' order by rand() limit 1";
-
             PixivDataResult pixivDataResult = pixivDataDao.queryPixivData(sql);
-
             if (pixivDataResult != null) {
                 if (pixivDataResult.getPixivDataCount() == 1) {
                     return pixivDataResult.getIterator().next();
