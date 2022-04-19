@@ -1,3 +1,8 @@
+# Here is mikoto
+# This repository has already unused.
+# The code here is really old and unuseful.
+# You shouldn't use it.
+
 # Mikoto-Pixiv-Engine
 
 Mikoto-Pixiv-Engine 是提供基础Pixiv服务的基础库
